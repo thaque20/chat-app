@@ -50,9 +50,8 @@ io.on('connect', (socket) => {
   })
 });
 
-app.use(express.static(path.join(__dirname, '../build')))
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build'))
-})
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static('client/build'));
+}
 
 server.listen(process.env.PORT || 5000, () => console.log(`Server has started.`));
