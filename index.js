@@ -2,10 +2,12 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const cors = require('cors');
+const path = require('path')
 
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 
-const router = require('./router');
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./server/users');
+
+const router = require('./server/router');
 
 const app = express();
 const server = http.createServer(app);
@@ -47,5 +49,10 @@ io.on('connect', (socket) => {
     }
   })
 });
+
+app.use(express.static(path.join(__dirname, '../build')))
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build'))
+})
 
 server.listen(process.env.PORT || 5000, () => console.log(`Server has started.`));
